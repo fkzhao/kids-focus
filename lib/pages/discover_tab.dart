@@ -1,65 +1,70 @@
 
 import 'package:flutter/material.dart';
+import 'dart:math';
 
 import 'detail_page.dart';
 
-class DiscoverTab extends StatelessWidget {
+import 'list_page.dart';
+
+
+
+class DiscoverTab extends ListPage<Map<String, String>> {
   const DiscoverTab({super.key});
 
   @override
-  Widget build(BuildContext context) {
-  final List<Map<String, String>> mockData = [
-      {
-        'image': 'https://picsum.photos/seed/1/80/80',
-        'title': '儿童专注力训练1',
-        'desc': '提升孩子专注力的小游戏和方法。',
-      },
-      {
-        'image': 'https://picsum.photos/seed/2/80/80',
-        'title': '亲子互动课程',
-        'desc': '和孩子一起成长，增进亲子关系。',
-      },
-      {
-        'image': 'https://picsum.photos/seed/3/80/80',
-        'title': '科学睡眠习惯',
-        'desc': '帮助孩子养成良好作息。',
-      },
-      {
-        'image': 'https://picsum.photos/seed/4/80/80',
-        'title': '情绪管理',
-        'desc': '教孩子正确表达和管理情绪。',
-      },
-    ];
+  String? get title => '发现';
 
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('发现'),
-        backgroundColor: Colors.lightGreenAccent,
-      ),
-      body: ListView.separated(
-        itemCount: mockData.length,
-        separatorBuilder: (context, index) => const Divider(height: 1),
-        itemBuilder: (context, index) {
-          final item = mockData[index];
-          return ListTile(
-            leading: ClipRRect(
-              borderRadius: BorderRadius.circular(8),
-              child: Image.network(item['image']!, width: 60, height: 60, fit: BoxFit.cover),
-            ),
-            title: Text(item['title'] ?? ''),
-            subtitle: Text(item['desc'] ?? ''),
-            onTap: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => DetailPage(
-                    id: index.toString(),
-                  ),
+  @override
+  Future<ListResult<Map<String, String>>> fetchData({bool loadMore = false}) async {
+    await Future.delayed(const Duration(milliseconds: 3000));
+    if (!loadMore) {
+      // 只允许5条，不能再加载更多
+      return ListResult(
+        List.generate(10, (i) => {
+          'image': 'https://picsum.photos/seed/${i + 1}/80/80',
+          'title': '专注力训练${i + 1}',
+          'desc': '这是第${i + 1}条内容，演示下拉刷新和加载更多。',
+        }),
+        true,
+      );
+    } else {
+      // 不允许再加载更多
+      return ListResult(
+        List.generate(3, (i) => {
+          'image': 'https://picsum.photos/seed/${i + 1}/80/80',
+          'title': '专注力训练${i + 1}',
+          'desc': '这是第${i + 1}条内容，演示下拉刷新和加载更多。',
+        }),
+        true,
+      );
+      
+    }
+  }
+
+  @override
+  Widget buildItem(BuildContext context, Map<String, String> item, int index) {
+    return Column(
+      children: [
+        ListTile(
+          leading: ClipRRect(
+            borderRadius: BorderRadius.circular(8),
+            child: Image.network(item['image']!, width: 60, height: 60, fit: BoxFit.cover),
+          ),
+          title: Text(item['title'] ?? ''),
+          subtitle: Text(item['desc'] ?? ''),
+          onTap: () {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => DetailPage(
+                  id: index.toString(),
                 ),
-              );
-            },
-          );
-        },
-      ),
+              ),
+            );
+          },
+        ),
+        const Divider(height: 1),
+      ],
     );
   }
 }
+
