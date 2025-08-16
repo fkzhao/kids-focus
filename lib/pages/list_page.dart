@@ -12,7 +12,7 @@ class ListResult<T> {
 
 abstract class ListPage<T> extends StatefulWidget {
   final String? title;
-  const ListPage({Key? key, this.title}) : super(key: key);
+  const ListPage({super.key, this.title});
 
   // 子类需实现
   Future<ListResult<T>> fetchData({bool loadMore = false});

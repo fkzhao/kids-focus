@@ -11,7 +11,7 @@ class BasePage extends StatelessWidget {
   final bool resizeToAvoidBottomInset;
 
   const BasePage({
-    Key? key,
+    super.key,
     this.title,
     this.showAppBar = true,
     this.appBar,
@@ -19,7 +19,7 @@ class BasePage extends StatelessWidget {
     this.floatingActionButton,
     this.bottomNavigationBar,
     this.resizeToAvoidBottomInset = true,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
