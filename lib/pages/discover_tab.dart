@@ -1,9 +1,7 @@
 
 import 'package:flutter/material.dart';
-import 'dart:math';
 
 import 'detail_page.dart';
-
 import 'list_page.dart';
 
 

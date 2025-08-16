@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:kids_focus/common/config.dart';
 import 'base_page.dart';
 
 class DetailPage extends StatelessWidget {
