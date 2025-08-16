@@ -80,6 +80,8 @@ class _DetailPageState extends State<DetailPage> {
       showAppBar: false,
       body: Stack(
         children: [
+          // 水波纹动画层
+          _RippleAnimation(),
           Padding(
             padding: const EdgeInsets.all(24.0),
             child: Column(
@@ -159,5 +161,78 @@ class _DetailPageState extends State<DetailPage> {
         ],
       ),
     );
+  }
+}
+
+class _RippleAnimation extends StatefulWidget {
+  @override
+  __RippleAnimationState createState() => __RippleAnimationState();
+}
+
+class __RippleAnimationState extends State<_RippleAnimation>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _animation;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 2),
+    )..repeat(reverse: true);
+    _animation = Tween<double>(begin: 0.0, end: 1.0).animate(_controller);
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: AnimatedBuilder(
+        animation: _animation,
+        builder: (context, child) {
+          return CustomPaint(
+            painter: _RipplePainter(_animation.value),
+            child: Container(
+              width: 200,
+              height: 200,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: Colors.blue.withOpacity(0.1),
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+}
+
+class _RipplePainter extends CustomPainter {
+  final double animationValue;
+
+  _RipplePainter(this.animationValue) : super(repaint: null);
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = Colors.blue.withOpacity(0.3)
+      ..style = PaintingStyle.fill;
+
+    canvas.drawCircle(
+      size.center(Offset.zero),
+      size.width * 0.5 * animationValue,
+      paint,
+    );
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) {
+    return true;
   }
 }
