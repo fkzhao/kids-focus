@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:kids_focus/common/logger.dart';
 import 'pages/home_tab.dart';
 import 'pages/discover_tab.dart';
 import 'pages/profile_tab.dart';
@@ -9,6 +10,8 @@ import 'common/config.dart';
 void main() {
   runApp(const MyApp());
   configLoading();
+  LogUtil.init(isDebug: true);
+  LogUtil.v('App started');
 }
 
 void configLoading() {
@@ -25,6 +28,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Bottom TabBar Demo',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(primarySwatch: Colors.blue),
       home: const MainPage(),
       builder: EasyLoading.init(),
